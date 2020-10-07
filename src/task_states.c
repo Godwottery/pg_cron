@@ -17,6 +17,7 @@
 #include "pg_cron.h"
 #include "task_states.h"
 
+#include "access/hash.h"
 #include "utils/hsearch.h"
 #include "utils/memutils.h"
 
@@ -36,7 +37,7 @@ static HTAB *CronTaskHash = NULL;
 void
 InitializeTaskStateHash(void)
 {
-	CronTaskContext = PgAllocSetContextCreate(CurrentMemoryContext,
+	CronTaskContext = AllocSetContextCreate(CurrentMemoryContext,
 											  "pg_cron task context",
 											  ALLOCSET_DEFAULT_MINSIZE,
 											  ALLOCSET_DEFAULT_INITSIZE,
