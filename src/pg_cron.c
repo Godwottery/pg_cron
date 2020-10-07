@@ -1068,7 +1068,7 @@ PollForTasks(List *taskList)
 
 
 #ifdef _MSC_VER
-		pollResult = WSAPoll(pollFDs, activeTaskCount, pollTimeout);
+	pollResult = WSAPoll(pollFDs, activeTaskCount, pollTimeout);
   	if (pollResult < 0)
   	{		
 			int err;
@@ -1076,7 +1076,7 @@ PollForTasks(List *taskList)
 			ereport(ERROR, (errmsg("Error with polling. WSAGetLastError says %d", err)));
 		}
 #else 
-		pollResult = poll(pollFDs, activeTaskCount, pollTimeout);
+	pollResult = poll(pollFDs, activeTaskCount, pollTimeout);
   	if (pollResult < 0)
   	{
 			/*
@@ -1095,11 +1095,11 @@ PollForTasks(List *taskList)
 		struct pollfd *pollFileDescriptor = &pollFDs[taskIndex];
 
 #ifdef _MSC_VER
-			task->isSocketReady = ( 
-				pollFileDescriptor->revents == pollFileDescriptor->events);
+		task->isSocketReady = ( 
+			pollFileDescriptor->revents == pollFileDescriptor->events);
 #else
-			task->isSocketReady = pollFileDescriptor->revents &
-							  pollFileDescriptor->events;
+		task->isSocketReady = pollFileDescriptor->revents &
+						  pollFileDescriptor->events;
 #endif
 	}
 
