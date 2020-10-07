@@ -1072,25 +1072,25 @@ PollForTasks(List *taskList)
 		pollResult = poll(pollFDs, activeTaskCount, pollTimeout);
 #endif
 
-	if (pollResult < 0)
-	{		
 #ifdef _MSC_VER
-		if (pollResult < 0) {
+  	if (pollResult < 0)
+  	{		
 			int err;
 			err = WSAGetLastError();
 			ereport(ERROR, (errmsg("Error with polling. WSAGetLastError says %d", err)));
 		}
 #else 
-		/*
-		 * This typically happens in case of a signal, though we should
-		 * probably check errno in case something bad happened.
-		 */
+  	if (pollResult < 0)
+  	{		
+		     /*
+		     * This typically happens in case of a signal, though we should
+		     * probably check errno in case something bad happened.
+		     */
+		    pfree(polledTasks);
+		    pfree(pollFDs);
+		    return;
+	  }
 #endif
-
-		pfree(polledTasks);
-		pfree(pollFDs);
-		return;
-	}
 
 	for (taskIndex = 0; taskIndex < activeTaskCount; taskIndex++)
 	{
